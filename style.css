@@ -176,6 +176,27 @@ body {
     background: transparent;
 }
 
+.password-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #86868b;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .login-submit-btn {
     width: calc(100% - 24px);
     margin: 12px;

