@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localiser - Find My iPhone</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Login Screen Overlay -->
+    <div id="login-screen">
+        <div class="login-container">
+            <div class="find-my-icon">
+                <div class="radar-circle">
+                    <div class="radar-sweep"></div>
+                </div>
+                <div class="center-dot"></div>
+            </div>
+            <h1>Localiser</h1>
+            <p class="subtitle">Utilisez votre identifiant Apple pour vous connecter à Localiser.</p>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <input type="text" id="apple-id" placeholder="Identifiant Apple" autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+                </div>
+                <button id="login-btn" class="login-submit-btn">
+                    <span>Se connecter</span>
+                </button>
+            </div>
+
+            <div class="login-footer">
+                <a href="#">Identifiant Apple ou mot de passe oublié ?</a>
+                <p>Vous n’avez pas d’identifiant Apple ? <a href="#">Créez-en un dès maintenant.</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passcode Screen Overlay -->
+    <div id="passcode-screen" class="hidden-ui">
+        <div class="passcode-container">
+            <h1>Code de verrouillage</h1>
+            <p class="subtitle">Saisissez le code de verrouillage de votre iPhone pour continuer.</p>
+            
+            <div class="passcode-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <div class="keypad">
+                <button class="key">1</button>
+                <button class="key">2</button>
+                <button class="key">3</button>
+                <button class="key">4</button>
+                <button class="key">5</button>
+                <button class="key">6</button>
+                <button class="key">7</button>
+                <button class="key">8</button>
+                <button class="key">9</button>
+                <div class="key-spacer"></div>
+                <button class="key">0</button>
+                <button class="key-text" id="delete-key">Effacer</button>
+            </div>
+            
+            <div class="passcode-footer">
+                <button class="link-btn">Code oublié ?</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" class="hidden-ui">
+        <!-- Main Sidebar Panel -->
+        <aside id="side-panel">
+            <header class="panel-header">
+                <div class="header-content">
+                    <h1>Appareils</h1>
+                    <button id="add-btn" class="icon-btn">+</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Rechercher">
+                </div>
+            </header>
+
+            <div class="device-list" id="device-list">
+                <!-- Device items will be injected here by JS -->
+            </div>
+
+            <nav id="tab-bar">
+                <button class="tab-item active" data-tab="devices">
+                    <span class="icon">💻</span>
+                    <span class="label">Appareils</span>
+                </button>
+                <button class="tab-item" data-tab="items">
+                    <span class="icon">🔑</span>
+                    <span class="label">Objets</span>
+                </button>
+                <button class="tab-item" data-tab="people">
+                    <span class="icon">👤</span>
+                    <span class="label">Personnes</span>
+                </button>
+                <button class="tab-item" data-tab="me">
+                    <span class="icon">🔵</span>
+                    <span class="label">Moi</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Device Detail Modal (Initially Hidden) -->
+        <div id="device-detail" class="hidden">
+            <div class="detail-handle"></div>
+            <div class="detail-header">
+                <div class="detail-icon" id="detail-icon">📱</div>
+                <div class="detail-info">
+                    <h2 id="detail-name">iPhone de Antigravity</h2>
+                    <p id="detail-status">En ligne • Il y a 1 min</p>
+                </div>
+                <button id="close-detail" class="icon-btn">✕</button>
+            </div>
+            
+            <div class="detail-actions">
+                <button class="action-btn">
+                    <div class="btn-icon">🔊</div>
+                    <span class="btn-label">Faire sonner</span>
+                </button>
+                <button class="action-btn">
+                    <div class="btn-icon">🚗</div>
+                    <span class="btn-label">Itinéraire</span>
+                </button>
+                <button class="action-btn">
+                    <div class="btn-icon">🔔</div>
+                    <span class="btn-label">Notifications</span>
+                </button>
+            </div>
+
+            <div class="detail-sections">
+                <div class="detail-section">
+                    <h3>Marquer comme perdu</h3>
+                    <p>Verrouillez l'appareil et laissez un message.</p>
+                    <button class="secondary-btn">Activer</button>
+                </div>
+                <div class="detail-section">
+                    <h3>Effacer cet appareil</h3>
+                    <p class="warning">Toutes les données seront supprimées.</p>
+                    <button class="secondary-btn warning">Effacer...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- jspdf JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
