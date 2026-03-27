@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialize Map
-    // Coordinates for "Paris, France" as a default viewport
-    const defaultLocation = [48.8566, 2.3522];
+    // Coordinates for "Yanfolila, Mali"
+    const defaultLocation = [11.1780, -8.1530];
     const map = L.map('map', {
-        zoomControl: false, // Custom placement might be better, but we'll leave it for now
+        zoomControl: false,
         attributionControl: false
     }).setView(defaultLocation, 13);
 
@@ -15,48 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Mock Data
     const devices = [
         {
-            id: 'iphone-15',
-            name: 'iPhone 15 Pro de Antigravity',
+            id: 'iphone-13-pro',
+            name: 'iPhone 13 Pro',
             status: 'En ligne',
             time: 'Maintenant',
-            battery: '84%',
-            icon: '📱',
-            lat: 48.8584,
-            lng: 2.2945, // Near Eiffel Tower
-            type: 'phone'
-        },
-        {
-            id: 'macbook-m3',
-            name: 'MacBook Pro M3 Max',
-            status: 'En ligne',
-            time: 'Il y a 5 min',
             battery: '100%',
-            icon: '💻',
-            lat: 48.8606,
-            lng: 2.3376, // Near Louvre
-            type: 'mac'
-        },
-        {
-            id: 'airpods-pro',
-            name: 'AirPods Pro de Antigravity',
-            status: 'Hors ligne',
-            time: 'Hier à 22:15',
-            battery: '12%',
-            icon: '🎧',
-            lat: 48.8530,
-            lng: 2.3499, // Near Notre Dame
-            type: 'audio'
-        },
-        {
-            id: 'ipad-air',
-            name: 'iPad Air',
-            status: 'En ligne',
-            time: 'Il y a 12 min',
-            battery: '65%',
-            icon: '📟',
-            lat: 48.8738,
-            lng: 2.2950, // Near Arc de Triomphe
-            type: 'tablet'
+            icon: '📱',
+            lat: 11.1785,
+            lng: -8.1535,
+            type: 'phone'
         }
     ];
 
@@ -135,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 8. Add "Me" location
-    const meLocation = [48.8580, 2.3000];
+    const meLocation = [11.1780, -8.1530];
     const meIcon = L.divIcon({
         className: 'custom-marker',
         html: `<div class="pulse-dot" style="background: #007AFF;"></div>`,
